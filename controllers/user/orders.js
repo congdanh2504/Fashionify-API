@@ -19,3 +19,12 @@ module.exports.orders = async (req, res) => {
         return res.send(error.message)
     }
 }
+
+module.exports.getUserOrders = async (user) => {
+    const orders = await ordersModel.find({user : user._id})
+        .populate({path : "user" , select : "-password -token"})
+        .populate("items.productId")
+        .populate("items.categoryId")
+
+    return orders
+}

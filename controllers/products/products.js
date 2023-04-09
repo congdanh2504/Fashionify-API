@@ -1,4 +1,7 @@
-const productModel = require("../../models/product")
+const productModel = require("../../models/product");
+const { getUserOrders } = require("../user/orders");
+const { getRecommendations } = require("./recommender");
+var random = require('mongoose-random');
 
 module.exports.addProduct = async (req, res) => {
     try{
@@ -115,6 +118,40 @@ module.exports.getAllProducts = async (req, res) => {
         })
 
     }catch(error){
+        return res.json({
+            success : false,
+            status : 400,
+            message : error.message
+        })
+    }
+}
+
+module.exports.getRecommendProducts = async (req, res) => {
+    try {
+        const orders = await getUserOrders(req.user)
+        let products = []
+        if (orders.length === 0) {
+            products = await productModel.find({}).populate("category").skip(5).limit(10)
+        } else {
+            let historyProduct = []
+            orders.forEach(order => {
+                order.items.forEach(product => {
+                    if (!historyProduct.includes(product.productId)) historyProduct.push(product.productId)
+                })
+            })
+            products = getRecommendations(historyProduct)
+        }
+
+        return res.json({
+            success : true,
+            status : 200,
+            message : "list of products",
+            data : products
+        })
+
+
+    } catch (error) {
+        console.log(error.message)
         return res.json({
             success : false,
             status : 400,

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+var random = require('mongoose-random');
 
 const productSchema = mongoose.Schema({
 
@@ -11,5 +12,7 @@ const productSchema = mongoose.Schema({
     quantity : Number
 
 }, { timestamps : true })
+
+productSchema.plugin(random, { path: 'r' });
 
 module.exports = mongoose.model("product", productSchema)
