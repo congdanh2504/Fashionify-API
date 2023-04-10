@@ -29,7 +29,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 
 const { register, login, updateUser, deleteUser, userById, resetPassword } = require("./controllers/auth/auth");
-const { addProduct, updateProduct, deleteProduct, getAllProducts, getRecommendProducts } = require("./controllers/products/products")
+const { addProduct, updateProduct, deleteProduct, getAllProducts, getRecommendProducts, getProductById } = require("./controllers/products/products")
 const { checkout, addToCart, cart, removeFromCart } = require("./controllers/user/cart")
 const { isAdmin, checkAuth } = require("./controllers/middlewares/auth");
 const { dashboardData, getAllUsers } = require('./controllers/admin/dashboard');
@@ -61,6 +61,7 @@ app.post("/reset-password", resetPassword)
 
 // Products
 app.post("/product", [isAdmin], addProduct)
+app.get("/product/:id", getProductById)
 app.get("/recommend-products", [checkAuth], getRecommendProducts)
 app.get("/products", getAllProducts)
 app.post("/update-product", [isAdmin], updateProduct)

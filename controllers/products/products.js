@@ -1,7 +1,24 @@
 const productModel = require("../../models/product");
 const { getUserOrders } = require("../user/orders");
 const { getRecommendations } = require("./recommender");
-var random = require('mongoose-random');
+
+module.exports.getProductById = async (req, res) => {
+    try{
+
+        const product_id = req.params['id'];
+
+        const product = await productModel.findById(product_id)
+
+        return res.json({
+            success : true,
+            message : "Get product successfully",
+            data : product
+        })
+
+    }catch(error){
+        return res.send(error.message)
+    }
+}
 
 module.exports.addProduct = async (req, res) => {
     try{

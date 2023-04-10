@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 const JWT_SECRET_KEY = process.env.TOKEN_KEY
 
 function generateAuthToken(data){
-  const token = jwt.sign(data, JWT_SECRET_KEY, { expiresIn: '10h' })
+  const token = jwt.sign(data, JWT_SECRET_KEY, { expiresIn: '365d' })
   return token
 }
 
