@@ -38,7 +38,8 @@ const { orders } = require('./controllers/user/orders');
 const { addCategory, getCategories, updateCategory, deleteCategory } = require('./controllers/categories/category');
 const { addToWishlist, wishlist, removeFromWishlist } = require('./controllers/user/wishlist');
 const { uploadPhoto } = require('./controllers/helper/file-upload');
-const mongoose = require("./config/database")
+const mongoose = require("./config/database");
+const { addReview, getProductReviews } = require('./controllers/review/review');
 
 mongoose()
 
@@ -67,6 +68,10 @@ app.get("/products", getAllProducts)
 app.post("/update-product", [isAdmin], updateProduct)
 app.get("/delete-product", [isAdmin], deleteProduct)
 
+
+// Reviews
+app.post("/add-review", [checkAuth], addReview)
+app.get("/review/:productId", getProductReviews)
 
 // CATEGORIES
 app.post("/category", [isAdmin], addCategory)
