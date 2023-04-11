@@ -117,6 +117,29 @@ module.exports.deleteProduct = async (req, res) => {
     } 
 }
 
+module.exports.getProductsPaginate = async (req, res) => {
+    try{
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const products = await productModel.find().populate("category").skip(skip).limit(limit);
+        const total = await productModel.countDocuments();
+
+        return res.json({
+            products,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+        });
+
+    }catch(error){
+        return res.json({
+            success : false,
+            status : 400,
+            message : error.message
+        })
+    }
+}
+
 module.exports.getAllProducts = async (req, res) => {
     try{
 
